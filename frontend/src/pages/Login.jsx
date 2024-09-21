@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Label, TextInput } from 'flowbite-react';  // Ensure Label is imported
+import { Button, Checkbox, Label, TextInput } from 'flowbite-react';  
 import { firebaseAuth } from '../utils/firebase.config';
 import { useDispatch } from 'react-redux';
-import { setToken } from '../redux//slice/auth/auth.slice';  // Import the setToken action
+import { setToken } from '../redux//slice/auth/auth.slice';  
 import { useNavigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Login_with_Email_Password } from '../utils/firebase.service';
