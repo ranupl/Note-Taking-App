@@ -3,9 +3,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoutes from './routes/userRoute.js'; 
 import noteRoutes from './routes/noteRoute.js'; 
-import admin from 'firebase-admin';
-// Add the assertion for JSON file
-import serviceAccount from './serviceAccount.json' assert { type: 'json' };
 
 dotenv.config();
 const app = express();
@@ -13,14 +10,6 @@ const PORT = process.env.PORT || 5002;
 
 app.use(express.json());
 app.use(cors());
-
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: process.env.DATABASEURL
-});
-
-const firestore = admin.firestore();
 
 // Export Firestore instance
 export { firestore };
