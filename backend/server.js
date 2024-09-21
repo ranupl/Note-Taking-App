@@ -17,7 +17,7 @@ app.use(cors());
 // Initialize Firebase Admin SDK
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://notes-maker-c69ab.firebaseio.com'
+    databaseURL: process.env.DATABASEURL
 });
 
 const firestore = admin.firestore();
