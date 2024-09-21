@@ -11,9 +11,6 @@ const PORT = process.env.PORT || 5002;
 app.use(express.json());
 app.use(cors());
 
-// Export Firestore instance
-export { firestore };
-
 app.get("/", (req, res) => {
     return res.json({ message: "Working fine" });
 });
