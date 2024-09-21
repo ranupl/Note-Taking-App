@@ -1,17 +1,41 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "flowbite-react";
 import trash from "../assets/trash.svg";
 import edit from "../assets/edit.svg";
 import share from "../assets/share.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteNote } from "../redux/slice/note/delete.note.slice";
+import { fetchNotes } from "../redux/slice/note/list.note.slice";
+import { getSingleNote } from "../redux/slice/note/getbyId.node.slice";
+import { editNote } from "../redux/slice/note/update.note.slice";
+import { toast } from 'react-toastify';
 
-const CardComponent = () => {
+const CardComponent = (props) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState({ title: "", description: "" });
 
+  const dispatch = useDispatch();
+
+  // Fetch the note from the Redux state
+  const note = useSelector((state) => state.getNoteById.data);
+
+  // Open edit modal and fetch the single note by ID
   const openEditModal = () => {
     setIsEditModalOpen(true);
+    dispatch(getSingleNote(props.id));
   };
+
+  // Populate form when note data is available
+  useEffect(() => {
+    if (note) {
+      setEditFormData({
+        title: note.title,
+        description: note.description,
+      });
+    }
+  }, [note]);
 
   const closeEditModal = () => {
     setIsEditModalOpen(false);
@@ -25,16 +49,32 @@ const CardComponent = () => {
     setIsShareModalOpen(false);
   };
 
+  // Handle input changes for controlled components
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setEditFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission for editing here
+    dispatch(editNote({ _id: props.id, formdata: editFormData }));
+    dispatch(fetchNotes());
+    toast.success("Note updated")
     closeEditModal();
   };
 
   const handleShareSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission for sharing here
     closeShareModal();
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteNote(props.id));
+    toast.success("Note delete")
+    dispatch(fetchNotes());
   };
 
   return (
@@ -46,6 +86,7 @@ const CardComponent = () => {
               src={trash}
               className="h-4 sm:h-4 cursor-pointer"
               alt="trash"
+              onClick={handleDelete}
             />
             <img
               src={edit}
@@ -64,12 +105,11 @@ const CardComponent = () => {
           <div className="border-t border-gray-200 mt-5"></div>
 
           <h5 className="mb-2 text-xl font-bold text-gray-500 dark:text-white">
-            Work fast from anywhere
+            {props.title}
           </h5>
 
           <p className="mb-5 text-base text-gray-500 dark:text-gray-400 sm:text-sm">
-            Stay up to date and move work forward with Flowbite on iOS & Android.
-            Download the app today.
+            {props.description}
           </p>
         </Card>
       </div>
@@ -82,24 +122,34 @@ const CardComponent = () => {
             <h2 className="text-xl font-semibold mb-4">Edit Note</h2>
             <form onSubmit={handleEditSubmit}>
               <div className="mb-4">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Title
                 </label>
                 <input
                   id="title"
                   type="text"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  value={editFormData.title}
+                  onChange={handleInputChange}
                   required
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Description
                 </label>
                 <textarea
                   id="description"
                   rows="4"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  value={editFormData.description}
+                  onChange={handleInputChange}
                   required
                 ></textarea>
               </div>
@@ -131,7 +181,10 @@ const CardComponent = () => {
             <h2 className="text-xl font-semibold mb-4">Share Note</h2>
             <form onSubmit={handleShareSubmit}>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Email
                 </label>
                 <input
