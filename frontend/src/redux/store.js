@@ -5,6 +5,7 @@ import { createNote } from "./slice/note/create.note.slice";
 import { deleteNotes } from "./slice/note/delete.note.slice";
 import { getNoteById } from "./slice/note/getbyId.node.slice";
 import { updateNote } from "./slice/note/update.note.slice";
+import { shareNotes } from "./slice/note/share.note.slice";
 
 export const store = configureStore({
     reducer : {
@@ -13,7 +14,8 @@ export const store = configureStore({
         addnote : createNote,
         deleteNote : deleteNotes,
         getNoteById : getNoteById,
-        updateNote :updateNote
+        updateNote :updateNote,
+        shareNote : shareNotes
       
     },
     devTools : true

@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { updateNoteApi } from "../../../api/editNote";
+import { shareNoteApi } from "../../../api/shareNote";
 
-export const editNote = createAsyncThunk("editNote", async ({_id, formdata}) => {
-    const response = await updateNoteApi(_id, formdata);
-    return response.data; 
+export const shareNote = createAsyncThunk("shareNote", async ({ id, data }) => {
+    const response = await shareNoteApi(id, data); 
+    return response.data;
 });
 
 const NoteSlice = createSlice({
-    name: "updatedNote",
+    name: "shareNote",
     initialState: {
         isLoading: false,
         data: [],
@@ -15,16 +15,16 @@ const NoteSlice = createSlice({
         success : false
     },
     extraReducers: (builder) => {
-        builder.addCase(editNote.pending, (state) => {
+        builder.addCase(shareNote.pending, (state) => {
             state.isLoading = true;
             state.success = false;
         });
-        builder.addCase(editNote.fulfilled, (state, action) => {
+        builder.addCase(shareNote.fulfilled, (state, action) => {
             state.isLoading = false;
             state.data.push(action.payload);
             state.success = true;
         });
-        builder.addCase(editNote.rejected, (state, action) => {
+        builder.addCase(shareNote.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.error.message;
             state.success = false;
@@ -32,4 +32,4 @@ const NoteSlice = createSlice({
     }
 });
 
-export const updateNote = NoteSlice.reducer;
+export const shareNotes = NoteSlice.reducer;

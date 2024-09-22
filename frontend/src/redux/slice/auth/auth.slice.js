@@ -3,17 +3,24 @@ import { createSlice } from '@reduxjs/toolkit';
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    token: null,
+    token: localStorage.getItem('token') || null,
+    email: localStorage.getItem('email') || null,
+    userid: localStorage.getItem('userid') || null,
   },
   reducers: {
-    setToken: (state, action) => {
-      state.token = action.payload;
+    setCredentials: (state, action) => {
+      const { token, email, userid } = action.payload;
+      state.token = token;
+      state.email = email;
+      state.userid = userid;
     },
-    clearToken: (state) => {
+    clearCredentials: (state) => {
       state.token = null;
+      state.email = null;
+      state.userid = null;
     },
   },
 });
 
-export const { setToken, clearToken } = authSlice.actions;
+export const { setCredentials, clearCredentials } = authSlice.actions;
 export default authSlice.reducer;

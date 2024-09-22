@@ -1,6 +1,7 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, getDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, getDoc , arrayUnion} from "firebase/firestore";
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,12 +16,9 @@ const firebaseConfig = {
 
 // Initialize Firebase and Firestore
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app); // Initialize Firestore
+const db = getFirestore(app); 
 
-// Create a reference to the 'Users' collection
 const usersCollection = collection(db, 'Users');
-
-// Create a reference to the 'Notes' collection
 const notesCollection = collection(db, 'Notes');
 
 // Function to add a new user to the 'Users' collection
@@ -65,8 +63,8 @@ export const deleteNote = async (id) => {
     }
 };
 
-// Get all notes
-export const getNotes = async () => {
+// Get all notes and filter by email
+export const getNotes = async (email) => {
     try {
         const snapshot = await getDocs(notesCollection); 
         const notes = snapshot.docs.map((doc) => {
@@ -77,13 +75,17 @@ export const getNotes = async () => {
                 ...data, 
             };
         });
-        return notes; 
+
+        const filteredNotes = notes.filter(note => 
+            note.user && note.user.some(userObj => userObj.email === email)
+        );
+
+        return filteredNotes;
     } catch (error) {
         console.error("Error fetching notes:", error);
         throw new Error(error.message); 
     }
 };
-
 
 // Get a note by ID
 export const getNoteById = async (id) => {
@@ -93,5 +95,19 @@ export const getNoteById = async (id) => {
         return { id: noteSnap.id, ...noteSnap.data() }; 
     } else {
         throw new Error('No such note!');
+    }
+};
+
+// Share note via email
+export const shareNoteByEmail = async (noteId, newUserData) => {
+    const noteRef = doc(db, 'Notes', noteId);
+    try {
+        await updateDoc(noteRef, {
+            user: arrayUnion(newUserData) 
+        });
+        console.log("Note shared with new user:", newUserData);
+    } catch (error) {
+        console.error("Error sharing note: ", error);
+        throw error;
     }
 };

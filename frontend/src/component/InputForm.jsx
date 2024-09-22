@@ -5,15 +5,23 @@ import { useDispatch } from "react-redux";
 import { addNote } from "../redux/slice/note/create.note.slice";
 import { fetchNotes } from "../redux/slice/note/list.note.slice";
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export const InputForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const dispatch = useDispatch();
-  
+  const navigate = useNavigate();
 
+  const token = localStorage.getItem('token');
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!token) {
+      toast.error("Please log in to add notes");
+      navigate('/login'); 
+      return;
+    }
 
     dispatch(addNote({ title, description }));
     dispatch(fetchNotes());
@@ -56,4 +64,3 @@ export const InputForm = () => {
     </div>
   );
 };
-

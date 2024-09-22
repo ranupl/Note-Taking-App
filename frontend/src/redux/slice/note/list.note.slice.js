@@ -6,7 +6,6 @@ export const fetchNotes = createAsyncThunk("fetchNotes", async (payload) => {
     return response.data; 
 });
 
-
 const NoteSlice = createSlice({
     name : "Notes",
     initialState : {

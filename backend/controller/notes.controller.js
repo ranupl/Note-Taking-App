@@ -1,4 +1,4 @@
-import { addNote, editNote, deleteNote, getNotes, getNoteById } from '../config/firebase.js';
+import { addNote, editNote, deleteNote, getNotes, getNoteById, shareNoteByEmail } from '../config/firebase.js';
 
 export const createNote = async (req, res) => {
     try {
@@ -32,8 +32,9 @@ export const removeNote = async (req, res) => {
 };
 
 export const listNotes = async (req, res) => {
+    const email = req.params.email;
     try {
-        const notes = await getNotes();
+        const notes = await getNotes(email);
         return res.json(notes);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -43,9 +44,20 @@ export const listNotes = async (req, res) => {
 export const getNote = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id, "getting id")
         const note = await getNoteById(id);
         return res.json(note);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const shareNote = async (req, res) => {
+    try {
+        const { id } = req.params; 
+        const newUserData = req.body; 
+
+        await shareNoteByEmail(id, newUserData);
+        return res.json({ message: "Note shared successfully" });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

@@ -6,7 +6,6 @@ export const getSingleNote = createAsyncThunk("getSingleNote", async (_id) => {
     return response;
 });
 
-
 const NoteSlice = createSlice({
     name : "singleNote",
     initialState : {
