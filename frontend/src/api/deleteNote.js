@@ -4,7 +4,7 @@ import config from '../config';
 export const deleteNoteApi = async (_id) => {
  
     try {
-        const response = await axios.delete(`${config.apiUrl}/api/v1/notes/removeNote/${_id}`);
+        const response = await axios.delete(`${config.apiUrl}/removeNote/${_id}`);
         return response;
 
     } catch(error) {

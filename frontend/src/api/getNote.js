@@ -5,7 +5,7 @@ export const getNoteByIdApi = async (_id) => {
   
     try {
       
-        const response = await axios.get(`${config.apiUrl}/api/v1/notes/getNote/${_id}`);
+        const response = await axios.get(`${config.apiUrl}/getNote/${_id}`);
         return response.data;
 
     } catch(error) {
