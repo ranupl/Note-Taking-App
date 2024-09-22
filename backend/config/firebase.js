@@ -4,23 +4,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Your web app's Firebase configuration
-// const firebaseConfig = {
-//   apiKey: process.env.APIKEY,
-//   authDomain: process.env.AUTHDOMAIN,
-//   projectId: process.env.PROJECTID,
-//   storageBucket: process.env.STORAGEBUCKET,
-//   messagingSenderId: process.env.MESSAGINGSENDERID,
-//   appId: process.env.APPID,
-//   measurementId: process.env.MEASUREMENTID
-// };
 const firebaseConfig = {
-      apiKey: "AIzaSyB05CrMTH94TuxKxO-7lQMK6mpOnSDCNoI",
-      authDomain: "notes-maker-c69ab.firebaseapp.com",
-      projectId: "notes-maker-c69ab",
-      storageBucket: "notes-maker-c69ab.appspot.com",
-      messagingSenderId: "772621807239",
-      appId: "1:772621807239:web:69f1e3cb9b413f68e95222",
-      measurementId: "G-CWFDVKVHJ6"
+  apiKey: process.env.APIKEY,
+  authDomain: process.env.AUTHDOMAIN,
+  projectId: process.env.PROJECTID,
+  storageBucket: process.env.STORAGEBUCKET,
+  messagingSenderId: process.env.MESSAGINGSENDERID,
+  appId: process.env.APPID,
+  measurementId: process.env.MEASUREMENTID
 };
 
 // Initialize Firebase and Firestore
